@@ -46,7 +46,8 @@ function playRound(playerSelection, computerSelection){
 function game() {
     let playerWins = 0;
     let computerWins = 0;
-    for (let i = 0; i < 5; i++) {
+    let keepGoing = true;
+    while (keepGoing) {
         let playerInput = prompt("Enter rock, paper, or scissors.");
         switch (playRound(playerInput, getComputerChoice())) {
             case 0:
@@ -61,15 +62,14 @@ function game() {
                 console.log("You lose this round.")
                 break;
         }
-    }
-    if (playerWins > computerWins){
-        console.log("You won the game!")
-    }
-    else if (playerWins < computerWins){
-        console.log("You lost the game.")
-    }
-    else {
-        console.log("It's a tie!")
+        if (playerWins === 5){
+            console.log("You won the game!")
+            keepGoing = false;
+        }
+        else if (computerWins === 5){
+            console.log("You lost the game.")
+            keepGoing = false;
+        }
     }
 }
 
