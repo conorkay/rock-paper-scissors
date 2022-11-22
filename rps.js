@@ -1,3 +1,24 @@
+let winCount = 0;
+let lossCount = 0;
+let tieCount = 0;
+
+updateScore();
+const buttons = document.querySelectorAll('#buttons>button');
+buttons.forEach(button => {
+    button.addEventListener('click', function(e) {
+        let roundResult = playRound(button.id, getComputerChoice());
+        processRoundResult(roundResult);
+    });
+});
+
+
+
+function updateScore () {
+    document.getElementById("wins").innerHTML = winCount;
+    document.getElementById("losses").innerHTML = lossCount;
+    document.getElementById("ties").innerHTML = tieCount;
+}
+
 function getComputerChoice() {
     switch (Math.floor(Math.random() * 3)) {
         case 0:
@@ -43,34 +64,73 @@ function playRound(playerSelection, computerSelection){
     }
 }
 
-function game() {
-    let playerWins = 0;
-    let computerWins = 0;
-    let keepGoing = true;
-    while (keepGoing) {
-        let playerInput = prompt("Enter rock, paper, or scissors.");
-        switch (playRound(playerInput, getComputerChoice())) {
-            case 0:
-                console.log("This round is a tie.")
-                break;
-            case 1:
-                ++playerWins;
-                console.log("You win this round.")
-                break;
-            case 2:
-                ++computerWins;
-                console.log("You lose this round.")
-                break;
-        }
-        if (playerWins === 5){
-            console.log("You won the game!")
-            keepGoing = false;
-        }
-        else if (computerWins === 5){
-            console.log("You lost the game.")
-            keepGoing = false;
-        }
+function processRoundResult(roundResult) {
+    switch (roundResult) {
+        case 0:  console.log("tie"); //round tie
+            tieRound();
+            break;
+        case 1: console.log("win"); //player win round
+            winRound();
+            break;
+        case 2: console.log("lose"); //computer win round
+            loseRound();
+            break;
+        default:
+            console.log("Error")
     }
 }
 
-game();
+function winRound() {
+    ++winCount;
+    updateScore();
+    if (winCount === 5){
+        endGame(1); //call endGame when player wins
+    }
+}
+
+function loseRound() {
+    ++lossCount;
+    updateScore();
+    if (lossCount === 5) {
+        endGame(2); //call endGame when player loses
+    }
+}
+
+function tieRound() {
+    ++tieCount;
+    updateScore();
+}
+
+function endGame(gameResult) {
+    let tieCountStr;
+    if (tieCount === 1) {
+        tieCountStr = "There was 1 tie.";
+    }
+    else {
+        tieCountStr = "There were " + tieCount + " ties.";
+    }
+    if (gameResult === 1) {
+        alert("You won the game.\n" + tieCountStr);
+    }
+    else {
+        alert("You lost the game.\n" + tieCountStr);
+    }
+    createResetButton();
+}
+
+function createResetButton() {
+    const resetButton = document.createElement('button');
+    resetButton.innerHTML = "Reset Game";
+    document.body.appendChild(resetButton);
+    resetButton.addEventListener('click', function(e) {
+        resetGame();
+        document.body.removeChild(resetButton);
+    });
+}
+
+function resetGame() {
+    winCount = 0;
+    lossCount = 0;
+    tieCount = 0;
+    updateScore();
+}
