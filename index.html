@@ -2,16 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css">
         <title>Rock, Paper, Scissors</title>
     </head>
     <body>
         <h1>Rock, Paper, Scissors</h1>
+        <div>Your choice: <span id="player"></span> VS Computer choice: <span id="computer"></span></div>
         <div id="buttons">
             <button id="rock">Rock</button>
             <button id="paper">Paper</button>
             <button id="scissors">Scissors</button>
         </div>
-        <div>
+        <div id="runningScore">
             <p>Wins: <span id="wins"></span></p>
             <p>Losses: <span id="losses"></span></p>
             <p>Ties: <span id="ties"></span></p>

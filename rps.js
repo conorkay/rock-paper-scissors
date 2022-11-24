@@ -1,8 +1,11 @@
 let winCount = 0;
 let lossCount = 0;
 let tieCount = 0;
+let playerInitial = '??';
+let computerInitial = '??';
 
 updateScore();
+displayChoices(playerInitial, computerInitial);
 const buttons = document.querySelectorAll('#buttons>button');
 buttons.forEach(button => {
     button.addEventListener('click', function(e) {
@@ -12,11 +15,15 @@ buttons.forEach(button => {
 });
 
 
-
 function updateScore () {
     document.getElementById("wins").innerHTML = winCount;
     document.getElementById("losses").innerHTML = lossCount;
     document.getElementById("ties").innerHTML = tieCount;
+}
+
+function displayChoices(playerSelection, computerSelection) {
+    document.getElementById('player').innerHTML = playerSelection;
+    document.getElementById('computer').innerHTML = computerSelection;
 }
 
 function getComputerChoice() {
@@ -31,6 +38,7 @@ function getComputerChoice() {
 }
 
 function playRound(playerSelection, computerSelection){
+    displayChoices(playerSelection, computerSelection);
     let playerSelectionLowerCase = playerSelection.toLowerCase();
     if (playerSelectionLowerCase === computerSelection) {
         return(0); //round tie
@@ -103,6 +111,7 @@ function tieRound() {
 
 function endGame(gameResult) {
     let tieCountStr;
+    let resultStr;
     if (tieCount === 1) {
         tieCountStr = "There was 1 tie.";
     }
@@ -110,21 +119,48 @@ function endGame(gameResult) {
         tieCountStr = "There were " + tieCount + " ties.";
     }
     if (gameResult === 1) {
-        alert("You won the game.\n" + tieCountStr);
+        resultStr = "You won the game.\n" + tieCountStr;
     }
     else {
-        alert("You lost the game.\n" + tieCountStr);
+        resultStr = "You lost the game.\n" + tieCountStr;
     }
+    disableGameButtons();
+    createResultDisplay(resultStr);
     createResetButton();
+}
+
+const resultDisplay = document.createElement('div');
+
+function createResultDisplay(resultStr) {
+    resultDisplay.innerText = resultStr;
+    document.body.appendChild(resultDisplay);
+}
+
+function removeResultDisplay() {
+    document.body.removeChild(resultDisplay);
 }
 
 function createResetButton() {
     const resetButton = document.createElement('button');
-    resetButton.innerHTML = "Reset Game";
+    resetButton.setAttribute('id', 'resetButton');
+    resetButton.innerHTML = "Play Again";
     document.body.appendChild(resetButton);
     resetButton.addEventListener('click', function(e) {
         resetGame();
         document.body.removeChild(resetButton);
+        removeResultDisplay();
+    });
+}
+
+function disableGameButtons() {
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+}
+
+function enableGameButtons() {
+    buttons.forEach(button => {
+        button.disabled = false;
     });
 }
 
@@ -133,4 +169,7 @@ function resetGame() {
     lossCount = 0;
     tieCount = 0;
     updateScore();
+    enableGameButtons();
+    displayChoices(playerInitial, computerInitial);
 }
+
